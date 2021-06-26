@@ -30,13 +30,13 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
-        initialRouteComponent="LocationLoading"
+        initialRouteComponent="RootNav"
       >
-        {/* <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
-        <Stack.Screen name="UserLoginScreen" component={UserLoginScreen} /> */}
+        {/* <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} /> */}
+        {/* <Stack.Screen name="UserLoginScreen" component={UserLoginScreen} /> */}
         {/* <Stack.Screen name="Home" component={Home} /> */}
-        {/* <Stack.Screen name="RootNav" component={RootNav} /> */}
-        <Stack.Screen name="LocationLoading" component={LocationLoading} />
+        <Stack.Screen name="RootNav" component={RootNav} />
+        {/* <Stack.Screen name="LocationLoading" component={LocationLoading} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -23,7 +23,11 @@ export default function WelcomeScreen({ navigation }) {
         <Text style={styles.subtitle}>
           Search PG,Hostel and Rental houses near you.
         </Text>
-        <Image source={require("../../assets/house.png")} />
+
+        <Image
+          style={styles.image}
+          source={require("../../assets/Group.png")}
+        />
       </View>
       <View style={styles.btnContainer}>
         <AppButton
