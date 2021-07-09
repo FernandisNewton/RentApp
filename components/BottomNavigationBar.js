@@ -12,13 +12,13 @@ export default function BottomNavigationBar() {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: "music", title: "Music", icon: "music" },
-    { key: "albums", title: "Albums", icon: "album" },
+    { key: "post", title: "post Rent Ad", icon: "add" },
     { key: "recents", title: "Recents", icon: "history" },
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
     music: MusicRoute,
-    albums: AlbumsRoute,
+    post: AlbumsRoute,
     recents: RecentsRoute,
   });
   return (

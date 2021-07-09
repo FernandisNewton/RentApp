@@ -32,13 +32,7 @@ export default function WelcomeScreen({ navigation }) {
       <View style={styles.btnContainer}>
         <AppButton
           onPress={() => navigation.navigate("UserLoginScreen")}
-          title="User Login"
-          size=""
-          backgroundColor="#F2F2F2"
-          textColor="#000"
-        />
-        <AppButton
-          title="Owner Login"
+          title="Get Started"
           size=""
           backgroundColor="#F2F2F2"
           textColor="#000"
@@ -60,7 +54,7 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     flex: 1,
-    backgroundColor: "#04BFBF",
+    backgroundColor: colorPalette.primaryColor,
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
     alignItems: "center",
