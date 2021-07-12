@@ -1,17 +1,31 @@
-import React, { Component } from "react";
+import React from "react";
 
 import { registerRootComponent } from "expo";
 import { Provider } from "react-redux";
 import App from "./App";
 import store from "./Store";
-class rootApp extends Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <App />
-      </Provider>
-    );
-  }
-}
+import AppLoading from "expo-app-loading";
+import {
+  useFonts,
+  Poppins_400Regular,
+  Poppins_700Bold,
+} from "@expo-google-fonts/poppins";
+const rootApp = () => {
+  let [fontsLoaded] = useFonts({
+    Poppins_400Regular,
+    Poppins_700Bold,
+  });
 
-export default registerRootComponent(rootApp);
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
+  return (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
+};
+
+registerRootComponent(rootApp);
+
+export default rootApp;

@@ -7,13 +7,18 @@ import {
   StatusBar,
   ScrollView,
   Image,
+  TouchableOpacity,
 } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { colorPalette } from "../../utility/Constants";
 import { Button, Searchbar, Avatar, Divider } from "react-native-paper";
 import { Entypo } from "@expo/vector-icons";
-import BottomNavigationBar from "../../components/BottomNavigationBar";
+import { connect } from "react-redux";
+import propTypes from "prop-types";
+import { signOut } from "../../redux/action/auth";
 import Card from "../../components/Card";
-export default function Home() {
+
+const Home = ({ navigation, signOut }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const onChangeSearch = (query) => setSearchQuery(query);
 
@@ -33,9 +38,14 @@ export default function Home() {
             placeholder="Search places"
             onChangeText={onChangeSearch}
             value={searchQuery}
-            style={{ marginRight: 40 }}
+            style={{ marginRight: 35 }}
           />
-          <Avatar.Text size={46} label="NF" />
+
+          <MaterialCommunityIcons
+            name="logout-variant"
+            size={45}
+            color="white"
+          />
         </View>
       </View>
       <ScrollView
@@ -50,8 +60,15 @@ export default function Home() {
       </ScrollView>
     </SafeAreaView>
   );
-}
+};
 
+const mapDispatchToProps = {
+  signOut,
+};
+Home.propTypes = {
+  signOut: propTypes.func.isRequired,
+};
+export default connect(null, mapDispatchToProps)(Home);
 const styles = StyleSheet.create({
   container: {
     flex: 1,

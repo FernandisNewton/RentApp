@@ -1,17 +1,17 @@
-import auth from "firebase/auth";
-import database from "firebase/database";
-import Snackbar from "react-native-snackbar";
+import firebase from "firebase";
 
 export const signUp = (data) => async (dispatch) => {
   const { name, email, phone, password } = data;
 
-  auth()
+  firebase
+    .auth()
     .createUserWithEmailAndPassword(email, password)
     .then((data) => {
       console.log(data);
       console.log("User creation was success");
 
-      database()
+      firebase
+        .database()
         .ref("/user/" + data.user.uid)
         .set({
           name,
@@ -21,55 +21,59 @@ export const signUp = (data) => async (dispatch) => {
           uid: data.user.uid,
         })
         .then(() => console.log("data set!!!"));
-      Snackbar.show({
-        text: "account created",
-        textColor: "#fff",
-        backgroundColor: "#000",
-      });
+      // Snackbar.show({
+      //   text: "account created",
+      //   textColor: "#fff",
+      //   backgroundColor: "#000",
+      // });
     })
     .catch((err) => {
-      Snackbar.show({
-        text: "Signup Failed",
-        textColor: "#fff",
-        backgroundColor: "#000",
-      });
+      // Snackbar.show({
+      //   text: "Signup Failed",
+      //   textColor: "#fff",
+      //   backgroundColor: "#000",
+      // });
+      console.log("DBERRE", err);
     });
 };
 
 export const signIn = (data) => async (dispatch) => {
   console.log(data);
   const { email, password } = data;
-  auth()
+
+  firebase
+    .auth()
     .signInWithEmailAndPassword(email, password)
     .then((data) => {
       console.log("SignIn succ");
-      Snackbar.show({
-        text: "Signed In!!!",
-        textColor: "#fff",
-        backgroundColor: "#000",
-      });
+      // Snackbar.show({
+      //   text: "Signed In!!!",
+      //   textColor: "#fff",
+      //   backgroundColor: "#000",
+      // });
     })
     .catch((err) => {
       console.err(err);
-      Snackbar.show({
-        text: "Signed in failed",
-        textColor: "#fff",
-        backgroundColor: "#000",
-      });
+      // Snackbar.show({
+      //   text: "Signed in failed",
+      //   textColor: "#fff",
+      //   backgroundColor: "#000",
+      // });
     });
 };
 
 export const signOut = () => async (dispatch) => {
-  auth()
+  firebase
+    .auth()
     .signOut()
     .then((data) => {
       console.log("SignOut succ");
     })
     .catch((err) => {
-      Snackbar.show({
-        text: "SigOut  failed",
-        textColor: "#fff",
-        backgroundColor: "#000",
-      });
+      // Snackbar.show({
+      //   text: "SigOut  failed",
+      //   textColor: "#fff",
+      //   backgroundColor: "#000",
+      // });
     });
 };

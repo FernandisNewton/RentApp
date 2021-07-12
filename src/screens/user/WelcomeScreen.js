@@ -10,6 +10,7 @@ import {
 
 import AppButton from "../../components/Button1";
 import { colorPalette } from "../../utility/Constants";
+import { Button } from "react-native-paper";
 export default function WelcomeScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
@@ -30,13 +31,36 @@ export default function WelcomeScreen({ navigation }) {
         />
       </View>
       <View style={styles.btnContainer}>
-        <AppButton
+        <Button
+          color={colorPalette.white}
+          mode="contained"
+          uppercase={false}
+          labelStyle={{ fontSize: 23, fontFamily: "Poppins_700Bold" }}
+          style={{
+            height: 60,
+            width: "80%",
+            justifyContent: "center",
+            borderRadius: 10,
+          }}
           onPress={() => navigation.navigate("UserLoginScreen")}
-          title="Get Started"
-          size=""
-          backgroundColor="#F2F2F2"
-          textColor="#000"
-        />
+        >
+          Sign In
+        </Button>
+        <Button
+          color={colorPalette.white}
+          mode="contained"
+          uppercase={false}
+          labelStyle={{ fontSize: 20, fontFamily: "Poppins_700Bold" }}
+          style={{
+            height: 60,
+            width: "80%",
+            justifyContent: "center",
+            borderRadius: 10,
+          }}
+          onPress={() => navigation.navigate("UserRegistration")}
+        >
+          Create an account
+        </Button>
       </View>
     </SafeAreaView>
   );
@@ -59,7 +83,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 25,
     alignItems: "center",
     justifyContent: "space-evenly",
-    paddingHorizontal: "5%",
   },
   name: {
     fontSize: 36,
