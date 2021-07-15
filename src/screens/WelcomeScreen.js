@@ -8,8 +8,8 @@ import {
   StatusBar,
 } from "react-native";
 
-import AppButton from "../../components/Button1";
-import { colorPalette } from "../../utility/Constants";
+import AppButton from "../components/Button1";
+import { colorPalette } from "../utility/Constants";
 import { Button } from "react-native-paper";
 export default function WelcomeScreen({ navigation }) {
   return (
@@ -25,10 +25,7 @@ export default function WelcomeScreen({ navigation }) {
           Search PG,Hostel and Rental houses near you.
         </Text>
 
-        <Image
-          style={styles.image}
-          source={require("../../assets/Group.png")}
-        />
+        <Image style={styles.image} source={require("../assets/Group.png")} />
       </View>
       <View style={styles.btnContainer}>
         <Button

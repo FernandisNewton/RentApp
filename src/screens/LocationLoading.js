@@ -1,12 +1,12 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import LottieView from "lottie-react-native";
-import { colorPalette } from "../../utility/Constants";
+import { colorPalette } from "../utility/Constants";
 export default function LocationLoading() {
   return (
     <View style={styles.container}>
       <LottieView
-        source={require("../../assets/animation/Location.json")}
+        source={require("../assets/animation/Location.json")}
         autoPlay
         loop
       />

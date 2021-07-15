@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -10,28 +10,68 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { colorPalette } from "../../utility/Constants";
+import { colorPalette } from "../utility/Constants";
 import { Button, Searchbar, Avatar, Divider } from "react-native-paper";
 import { Entypo } from "@expo/vector-icons";
 import { connect } from "react-redux";
 import propTypes from "prop-types";
-import { signOut } from "../../redux/action/auth";
-import Card from "../../components/Card";
+import { signOut } from "../redux/action/auth";
+import Card from "../components/Card";
+import LocationLoading from "../screens/LocationLoading";
+import * as Location from "expo-location";
 
+import { UserLocationContext } from "../contexts/UserLocationContext";
 const Home = ({ navigation, signOut }) => {
+  const [address, setAddress, loading, setLoading] =
+    useContext(UserLocationContext);
   const [searchQuery, setSearchQuery] = useState("");
   const onChangeSearch = (query) => setSearchQuery(query);
 
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+      setLoading(true);
+
+      let location = await Location.getCurrentPositionAsync({});
+
+      console.log("LOC", location);
+      let curraddress = await Location.reverseGeocodeAsync({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      })
+        .then((result) => {
+          console.log("ADDRESS", result);
+          setAddress({
+            city: result[0].city,
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      setLoading(false);
+    })();
+  }, []);
+  if (loading) {
+    return <LocationLoading />;
+  }
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
         barStyle="light-content"
         backgroundColor={colorPalette.primaryColor}
       />
+
       <View style={styles.topContainer}>
         <View style={styles.location}>
           <Entypo name="location" size={24} color={colorPalette.white} />
-          <Text style={styles.locationText}>Sirsi</Text>
+          <Text style={styles.locationText}>{address.city}</Text>
         </View>
         <View style={styles.search}>
           <Searchbar

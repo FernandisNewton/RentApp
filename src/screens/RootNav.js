@@ -1,17 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { BottomNavigation } from "react-native-paper";
-import { colorPalette } from "../../utility/Constants";
+import { colorPalette } from "../utility/Constants";
 
 import Home from "./Home";
 import RentAds from "./RentAds";
-import FetchLocation from "../../redux/action/FetchLocation";
+
 const HomeRoute = () => <Home />;
 
 const AdRoute = () => <RentAds />;
 
-const RecentsRoute = () => <Text>Recents</Text>;
-const AdsRoute = () => <FetchLocation />;
+const AdsRoute = () => <Text>Recents</Text>;
 
 export default function RootNav() {
   const [index, setIndex] = React.useState(0);
@@ -32,6 +31,7 @@ export default function RootNav() {
     // favorites: RecentsRoute,
     ads: AdsRoute,
   });
+
   return (
     <BottomNavigation
       navigationState={{ index, routes }}

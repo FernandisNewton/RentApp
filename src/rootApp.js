@@ -5,15 +5,18 @@ import { Provider } from "react-redux";
 import App from "./App";
 import store from "./Store";
 import AppLoading from "expo-app-loading";
+import { UserLocationProvider } from "./contexts/UserLocationContext";
 import {
   useFonts,
   Poppins_400Regular,
   Poppins_700Bold,
+  Poppins_500Medium,
 } from "@expo-google-fonts/poppins";
 const rootApp = () => {
   let [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_700Bold,
+    Poppins_500Medium,
   });
 
   if (!fontsLoaded) {
@@ -21,7 +24,9 @@ const rootApp = () => {
   }
   return (
     <Provider store={store}>
-      <App />
+      <UserLocationProvider>
+        <App />
+      </UserLocationProvider>
     </Provider>
   );
 };

@@ -1,20 +1,21 @@
 import React, { useEffect } from "react";
 //----SCREENS----
-import WelcomeScreen from "./screens/user/WelcomeScreen";
-import UserLoginScreen from "./screens/user/UserLoginScreen";
-import Home from "./screens/user/Home";
-import RootNav from "./screens/user/RootNav";
-import MapScreen from "./screens/user/MapScreen";
-import PostAd from "./screens/user/PostAd";
-import RentAds from "./screens/user/RentAds";
-import LocationLoading from "./screens/user/LocationLoading";
-import UserRegistration from "./screens/user/UserRegistration";
+import WelcomeScreen from "./screens/WelcomeScreen";
+import UserLoginScreen from "./screens/UserLoginScreen";
+import Home from "./screens/Home";
+import RootNav from "./screens/RootNav";
+import MapScreen from "./screens/MapScreen";
+import PostAd from "./screens/PostAd";
+import RentAds from "./screens/RentAds";
+
+import UserRegistration from "./screens/UserRegistration";
+import LocationLoading from "./screens/LocationLoading";
 //----****----
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-
+import { ActivityIndicator } from "react-native-paper";
 import Firebase from "./services/Firebase";
-
+import { colorPalette } from "./utility/Constants";
 import firebase from "firebase";
 import { useDispatch, connect } from "react-redux";
 import { SET_USER, IS_AUTHENTICATED } from "./redux/action/action.types";
@@ -49,12 +50,13 @@ const App = ({ authState }) => {
         });
       }
     } catch (error) {
-      console.err("OnAuthChangeErr", error);
+      console.log("OnAuthChangeErr", error);
     }
   };
   useEffect(() => {
     try {
       const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChanged);
+
       return subscriber;
     } catch (error) {
       console.log(error);
@@ -62,7 +64,13 @@ const App = ({ authState }) => {
   }, []);
 
   if (authState.loading) {
-    return <LocationLoading />;
+    return (
+      <ActivityIndicator
+        color={colorPalette.primaryColor}
+        size="large"
+        style={{ marginTop: "100%" }}
+      />
+    );
   }
   return (
     <NavigationContainer>

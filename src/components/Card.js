@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     height: 170,
     backgroundColor: "#fff",
     borderRadius: 10,
-    elevation: 3,
+    elevation: 8,
     marginTop: 10,
   },
   content: {

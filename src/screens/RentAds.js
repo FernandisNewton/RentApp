@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, ScrollView, StatusBar } from "react-native";
 import { FAB } from "react-native-paper";
-import { colorPalette } from "../../utility/Constants";
+import { colorPalette } from "../utility/Constants";
 import { useNavigation } from "@react-navigation/native";
 
 export default function RentAds() {
@@ -17,7 +17,7 @@ export default function RentAds() {
         style={styles.fab}
         icon="plus"
         label="Add "
-        onPress={() => navigation.navigate("PostAd")}
+        onPress={() => navigation.navigate("MapScreen")}
       />
     </ScrollView>
   );
