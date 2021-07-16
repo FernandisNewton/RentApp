@@ -6,6 +6,7 @@ import App from "./App";
 import store from "./Store";
 import AppLoading from "expo-app-loading";
 import { UserLocationProvider } from "./contexts/UserLocationContext";
+import { PropertyLocationProvider } from "./contexts/PropertyLocationContext";
 import {
   useFonts,
   Poppins_400Regular,
@@ -24,9 +25,11 @@ const rootApp = () => {
   }
   return (
     <Provider store={store}>
-      <UserLocationProvider>
-        <App />
-      </UserLocationProvider>
+      <PropertyLocationProvider>
+        <UserLocationProvider>
+          <App />
+        </UserLocationProvider>
+      </PropertyLocationProvider>
     </Provider>
   );
 };

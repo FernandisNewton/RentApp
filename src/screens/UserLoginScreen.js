@@ -7,8 +7,8 @@ import {
   StatusBar,
   ScrollView,
 } from "react-native";
-import { Button } from "react-native-paper";
-import { TextInput } from "react-native-paper";
+import { Button, TextInput } from "react-native-paper";
+
 import { colorPalette } from "../utility/Constants";
 import { connect } from "react-redux";
 import { signIn } from "../redux/action/auth";

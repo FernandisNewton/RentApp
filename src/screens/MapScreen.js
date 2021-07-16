@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, Text, View, Dimensions, Image } from "react-native";
 import MapView, { Marker, Callout } from "react-native-maps";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import PlacesInput from "react-native-places-input";
+import * as Location from "expo-location";
 import { Button } from "react-native-paper";
 import { colorPalette } from "../utility/Constants";
-export default function MapScreen() {
-  const [myregion, setMyRegion] = React.useState({
+import { PropertyLocationContext } from "../contexts/PropertyLocationContext.js";
+import { UserLocationContext } from "../contexts/UserLocationContext";
+export default function MapScreen({ navigation }) {
+  const [myRegion, setMyRegion] = React.useState({
     region: {
       latitude: 12.9141,
       longitude: 74.856,
@@ -14,10 +17,43 @@ export default function MapScreen() {
       longitudeDelta: 0.0021,
     },
   });
-
+  const [loading, setLoading] = useState(false);
+  const [propAddress, setPropAddress] = useContext(PropertyLocationContext);
+  const [address] = useContext(UserLocationContext);
+  useEffect(() => {
+    setMyRegion({
+      region: {
+        latitude: address.latitude,
+        longitude: address.longitude,
+        latitudeDelta: 0.0022,
+        longitudeDelta: 0.0021,
+      },
+    });
+  }, []);
+  const confirmLocation = async () => {
+    setLoading(true);
+    console.log("REG", myRegion);
+    await Location.reverseGeocodeAsync({
+      latitude: myRegion.latitude,
+      longitude: myRegion.longitude,
+    })
+      .then((result) => {
+        console.log("ADDRESS", result);
+        setPropAddress({
+          address: result[0],
+          latitude: myRegion.latitude,
+          longitude: myRegion.longitude,
+        });
+        setLoading(false);
+        navigation.navigate("PostAd");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const onRegionChange = (region) => {
     setMyRegion(region);
-    console.log(myregion);
+    console.log(myRegion);
   };
   return (
     <View style={{ flex: 1, alignItems: "center" }}>
@@ -30,11 +66,13 @@ export default function MapScreen() {
         onPress={(data, details = null) => {
           // 'details' is provided when fetchDetails = true
           console.log("DETAILS LOCATION", data, details);
-          setRegion({
-            latitude: details.geometry.location.lat,
-            longitude: details.geometry.location.lng,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
+          setMyRegion({
+            region: {
+              latitude: details.geometry.location.lat,
+              longitude: details.geometry.location.lng,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            },
           });
         }}
         query={{
@@ -43,7 +81,7 @@ export default function MapScreen() {
           components: "country:in",
           types: "establishment",
           radius: 30000,
-          location: `${myregion.latitude}, ${myregion.longitude}`,
+          location: `${myRegion.latitude}, ${myRegion.longitude}`,
         }}
         styles={{
           container: {
@@ -57,19 +95,19 @@ export default function MapScreen() {
         }}
       />
       <MapView
-        region={myregion.region}
+        region={myRegion.region}
         provider="google"
         onRegionChange={onRegionChange}
         style={styles.map}
-      ></MapView>
+      />
       <Image
         style={{
           position: "absolute",
           marginTop: Dimensions.get("window").height / 2.3,
 
           zIndex: 1,
-          height: 50,
-          width: 50,
+          height: 40,
+          width: 40,
         }}
         source={require("../assets/location-pin.png")}
       />
@@ -78,7 +116,9 @@ export default function MapScreen() {
         mode="contained"
         uppercase={false}
         dark={true}
+        loading={loading}
         labelStyle={{ fontSize: 20, fontFamily: "Poppins_500Medium" }}
+        onPress={confirmLocation}
         style={{
           height: 50,
           justifyContent: "center",

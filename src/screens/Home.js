@@ -19,7 +19,6 @@ import { signOut } from "../redux/action/auth";
 import Card from "../components/Card";
 import LocationLoading from "../screens/LocationLoading";
 import * as Location from "expo-location";
-
 import { UserLocationContext } from "../contexts/UserLocationContext";
 const Home = ({ navigation, signOut }) => {
   const [address, setAddress, loading, setLoading] =
