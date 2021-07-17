@@ -7,7 +7,7 @@ import RootNav from "./screens/RootNav";
 import MapScreen from "./screens/MapScreen";
 import PostAd from "./screens/PostAd";
 import RentAds from "./screens/RentAds";
-
+import PGInfo from "./screens/PGInfo";
 import UserRegistration from "./screens/UserRegistration";
 import LocationLoading from "./screens/LocationLoading";
 //----****----
@@ -76,7 +76,7 @@ const App = ({ authState }) => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
-        // initialRouteName="RootNav"
+        // initialRouteName="PGInfo"
       >
         {authState.isAuthenticated ? (
           <>
@@ -86,6 +86,7 @@ const App = ({ authState }) => {
             <Stack.Screen name="PostAd" component={PostAd} />
             <Stack.Screen name="RentAds" component={RentAds} />
             <Stack.Screen name="LocationLoading" component={LocationLoading} />
+            <Stack.Screen name="PGInfo" component={PGInfo} />
           </>
         ) : (
           <>

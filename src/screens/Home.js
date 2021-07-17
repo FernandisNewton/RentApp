@@ -57,6 +57,9 @@ const Home = ({ navigation, signOut }) => {
       setLoading(false);
     })();
   }, []);
+  const doSignOut = () => {
+    signOut();
+  };
   if (loading) {
     return <LocationLoading />;
   }
@@ -72,20 +75,9 @@ const Home = ({ navigation, signOut }) => {
           <Entypo name="location" size={24} color={colorPalette.white} />
           <Text style={styles.locationText}>{address.city}</Text>
         </View>
-        <View style={styles.search}>
-          <Searchbar
-            placeholder="Search places"
-            onChangeText={onChangeSearch}
-            value={searchQuery}
-            style={{ marginRight: 35 }}
-          />
-
-          <MaterialCommunityIcons
-            name="logout-variant"
-            size={45}
-            color="white"
-          />
-        </View>
+        <TouchableOpacity onPress={() => doSignOut()}>
+          <Text style={styles.logOutText}>Log Out</Text>
+        </TouchableOpacity>
       </View>
       <ScrollView
         contentContainerStyle={{
@@ -129,12 +121,22 @@ const styles = StyleSheet.create({
     marginTop: 10,
     color: colorPalette.white,
   },
+  logOutText: {
+    fontSize: 20,
+    fontFamily: "Poppins_500Medium",
+    marginLeft: 10,
+    marginTop: 10,
+    color: colorPalette.white,
+  },
   topContainer: {
-    paddingBottom: 20,
+    paddingBottom: 10,
     paddingHorizontal: 25,
-    borderBottomEndRadius: 25,
-    borderBottomLeftRadius: 25,
+    borderBottomEndRadius: 20,
+    borderBottomLeftRadius: 20,
     elevation: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
 
     backgroundColor: colorPalette.primaryColor,
   },

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Text, View, StyleSheet, Image, ScrollView } from "react-native";
-import * as ImagePicker from "expo-image-picker";
+
 import firebase from "firebase";
 import { Button, TextInput } from "react-native-paper";
 import { connect } from "react-redux";
@@ -10,9 +10,9 @@ import { colorPalette } from "../utility/Constants";
 import { PropertyLocationContext } from "../contexts/PropertyLocationContext";
 const PostAd = ({ navigation, userState }) => {
   const [image, setImage] = useState(null);
-  const [imageUploading, setImageUploading] = useState(false);
-  const [uploadStatus, setUploadStatus] = useState(null);
+
   const [propAddress] = useContext(PropertyLocationContext);
+
   const [addressLine1, setAddressLine1] = useState("");
   const [addressLine2, setAddressLine2] = useState("");
   const [landmark, setLandmark] = useState("");
@@ -21,30 +21,20 @@ const PostAd = ({ navigation, userState }) => {
   const [state, setState] = useState(propAddress.address.region);
   const [country, setCountry] = useState(propAddress.address.country);
   const [pincode, setPincode] = useState(propAddress.address.postalCode);
-  useEffect(() => {
-    (async () => {
-      if (Platform.OS !== "web") {
-        const { status } =
-          await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== "granted") {
-          alert("Sorry, we need camera roll permissions to make this work!");
-        }
-      }
-    })();
-  }, []);
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 1,
+
+  const onSubmit = () => {
+    navigation.navigate("PGInfo", {
+      addressLine1: addressLine1,
+      addressLine2: addressLine2,
+      city: city,
+      landmark: landmark,
+      district: district,
+      state: state,
+      country: country,
+      pincode: pincode,
+      latitude: propAddress.latitude,
+      longitude: propAddress.longitude,
     });
-
-    console.log(result);
-
-    if (!result.cancelled) {
-      setImage(result.uri);
-    }
   };
   return (
     <ScrollView
@@ -154,7 +144,7 @@ const PostAd = ({ navigation, userState }) => {
         dark={true}
         labelStyle={{ fontSize: 20 }}
         style={{ height: 55, justifyContent: "center", marginTop: 10 }}
-        onPress={() => pickImage()}
+        onPress={() => onSubmit()}
       >
         Next
       </Button>
