@@ -10,6 +10,7 @@ import RentAds from "./screens/RentAds";
 import PGInfo from "./screens/PGInfo";
 import UserRegistration from "./screens/UserRegistration";
 import LocationLoading from "./screens/LocationLoading";
+import Completed from "./screens/Completed";
 //----****----
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -87,6 +88,7 @@ const App = ({ authState }) => {
             <Stack.Screen name="RentAds" component={RentAds} />
             <Stack.Screen name="LocationLoading" component={LocationLoading} />
             <Stack.Screen name="PGInfo" component={PGInfo} />
+            <Stack.Screen name="Completed" component={Completed} />
           </>
         ) : (
           <>

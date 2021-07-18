@@ -45,6 +45,7 @@ const PGInfo = ({ route, navigation }) => {
       aspect: [4, 4],
       quality: 1,
     });
+    onSubmit();
 
     console.log(result);
 
@@ -180,7 +181,7 @@ const PGInfo = ({ route, navigation }) => {
         dark={true}
         labelStyle={{ fontSize: 20 }}
         style={{ height: 55, justifyContent: "center", marginTop: 15 }}
-        // onPress={() => onSubmit()}
+        onPress={() => navigation.navigate("Completed")}
       >
         Create Rental ad
       </Button>
