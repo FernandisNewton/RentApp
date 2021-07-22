@@ -10,9 +10,7 @@ import { colorPalette } from "../utility/Constants";
 import { PropertyLocationContext } from "../contexts/PropertyLocationContext";
 const PostAd = ({ navigation, userState }) => {
   const [image, setImage] = useState(null);
-
   const [propAddress] = useContext(PropertyLocationContext);
-
   const [addressLine1, setAddressLine1] = useState("");
   const [addressLine2, setAddressLine2] = useState("");
   const [landmark, setLandmark] = useState("");

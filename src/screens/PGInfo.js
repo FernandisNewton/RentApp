@@ -1,8 +1,18 @@
 import React, { useContext, useState, useEffect } from "react";
-import { View, StyleSheet, Text, ScrollView, Picker } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  ScrollView,
+  Picker,
+  Image,
+} from "react-native";
 import { Button, TextInput, Chip, RadioButton } from "react-native-paper";
 import { colorPalette } from "../utility/Constants";
 import * as ImagePicker from "expo-image-picker";
+import shortid from "shortid";
+// import ImagePicker from "react-native-image-picker";
+import firebase from "firebase";
 const PGInfo = ({ route, navigation }) => {
   const [adTitle, setAdTitle] = useState("");
   const [rentpm, setRentpm] = useState("");
@@ -14,6 +24,8 @@ const PGInfo = ({ route, navigation }) => {
   const [deposit, setDeposit] = useState(null);
   const [phone, setPhone] = useState(null);
   const [image, setImage] = useState(null);
+  const [imageUploading, setImageUploading] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState(false);
 
   const {
     addressLine1,
@@ -27,6 +39,39 @@ const PGInfo = ({ route, navigation }) => {
     latitude,
     longitude,
   } = route.params;
+
+  const uploadImage = async (response) => {
+    setImageUploading(true);
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function (e) {
+        console.log(e);
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", response.uri, true);
+      xhr.send(null);
+    });
+
+    const reference = firebase.storage().ref(shortid.generate());
+    const task = reference.put(blob);
+
+    task.on("state_changed", (taskSnapshot) => {
+      const percentage =
+        (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 1000;
+      setUploadStatus(percentage);
+    });
+    task.then(async () => {
+      await blob.close();
+      const url = await reference.getDownloadURL();
+      console.log(url);
+      setImage(url);
+      setImageUploading(false);
+    });
+  };
   useEffect(() => {
     (async () => {
       if (Platform.OS !== "web") {
@@ -45,15 +90,47 @@ const PGInfo = ({ route, navigation }) => {
       aspect: [4, 4],
       quality: 1,
     });
-    onSubmit();
 
     console.log(result);
 
     if (!result.cancelled) {
-      setImage(result.uri);
+      uploadImage(result);
     }
   };
+  const addData = async () => {
+    try {
+      const uid = shortid.generate();
+      await firebase.database().ref(`/posts/${uid}`).set({
+        addressLine1,
+        addressLine2,
+        city,
+        landmark,
+        district,
+        state,
+        country,
+        pincode,
+        latitude,
+        longitude,
+        adTitle,
+        rentpm,
+        roomType,
+        tenentType: {
+          tenentBoys,
+          tenentGirls,
+          tenentFamily,
+        },
+        depositType: value,
+        deposit,
+        phone,
+        picture: image,
+        date: Date.now(),
+      });
 
+      navigation.navigate("Completed");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <ScrollView
       contentContainerStyle={{
@@ -62,6 +139,7 @@ const PGInfo = ({ route, navigation }) => {
       }}
     >
       <Text style={styles.title}>Enter PG Details</Text>
+
       <TextInput
         label="AD - Title"
         mode="outlined"
@@ -167,6 +245,7 @@ const PGInfo = ({ route, navigation }) => {
         color={colorPalette.primaryColor}
         mode="outlined"
         uppercase={true}
+        loading={imageUploading}
         dark={true}
         labelStyle={{ fontSize: 20 }}
         style={{ height: 55, justifyContent: "center", marginTop: 10 }}
@@ -181,7 +260,7 @@ const PGInfo = ({ route, navigation }) => {
         dark={true}
         labelStyle={{ fontSize: 20 }}
         style={{ height: 55, justifyContent: "center", marginTop: 15 }}
-        onPress={() => navigation.navigate("Completed")}
+        onPress={() => addData()}
       >
         Create Rental ad
       </Button>

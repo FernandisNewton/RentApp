@@ -7,14 +7,14 @@ const Completed = ({ navigation }) => {
   useEffect(() => {
     setTimeout(function () {
       navigation.navigate("RootNav");
-    }, 1000);
+    }, 1600);
   }, []);
   return (
     <View style={styles.container}>
       <LottieView
         source={require("../assets/animation/completed.json")}
         autoPlay
-        loop
+        loop={false}
       />
       <Text style={styles.text}></Text>
     </View>
