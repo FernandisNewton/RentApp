@@ -8,12 +8,15 @@ import {
   Image,
 } from "react-native";
 import { Button, TextInput, Chip, RadioButton } from "react-native-paper";
+import * as Progress from "react-native-progress";
+
 import { colorPalette } from "../utility/Constants";
 import * as ImagePicker from "expo-image-picker";
 import shortid from "shortid";
-// import ImagePicker from "react-native-image-picker";
+import { connect } from "react-redux";
+import propTypes from "prop-types";
 import firebase from "firebase";
-const PGInfo = ({ route, navigation }) => {
+const PGInfo = ({ route, navigation, userState }) => {
   const [adTitle, setAdTitle] = useState("");
   const [rentpm, setRentpm] = useState("");
   const [tenentBoys, setTenentBoys] = useState(false);
@@ -25,7 +28,7 @@ const PGInfo = ({ route, navigation }) => {
   const [phone, setPhone] = useState(null);
   const [image, setImage] = useState(null);
   const [imageUploading, setImageUploading] = useState(false);
-  const [uploadStatus, setUploadStatus] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState(0);
 
   const {
     addressLine1,
@@ -61,7 +64,8 @@ const PGInfo = ({ route, navigation }) => {
 
     task.on("state_changed", (taskSnapshot) => {
       const percentage =
-        (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) * 1000;
+        taskSnapshot.bytesTransferred / taskSnapshot.totalBytes;
+      console.log(percentage);
       setUploadStatus(percentage);
     });
     task.then(async () => {
@@ -97,10 +101,14 @@ const PGInfo = ({ route, navigation }) => {
       uploadImage(result);
     }
   };
+  if (imageUploading) {
+    console.log(uploadStatus);
+  }
   const addData = async () => {
     try {
       const uid = shortid.generate();
       await firebase.database().ref(`/posts/${uid}`).set({
+        id: uid,
         addressLine1,
         addressLine2,
         city,
@@ -124,6 +132,7 @@ const PGInfo = ({ route, navigation }) => {
         phone,
         picture: image,
         date: Date.now(),
+        by: userState.name,
       });
 
       navigation.navigate("Completed");
@@ -139,7 +148,41 @@ const PGInfo = ({ route, navigation }) => {
       }}
     >
       <Text style={styles.title}>Enter PG Details</Text>
-
+      {image && (
+        <Image
+          style={styles.tinyLogo}
+          source={{
+            uri: image,
+          }}
+        />
+      )}
+      {imageUploading ? (
+        <Progress.Bar
+          progress={uploadStatus}
+          width={320}
+          color={colorPalette.primaryColor}
+          height={15}
+          borderRadius={8}
+        />
+      ) : (
+        <Button
+          color={colorPalette.primaryColor}
+          mode="outlined"
+          uppercase={true}
+          loading={imageUploading}
+          dark={true}
+          labelStyle={{ fontSize: 20 }}
+          style={{
+            height: 55,
+            justifyContent: "center",
+            marginTop: 10,
+            marginBottom: 15,
+          }}
+          onPress={() => pickImage()}
+        >
+          upload photo
+        </Button>
+      )}
       <TextInput
         label="AD - Title"
         mode="outlined"
@@ -241,25 +284,19 @@ const PGInfo = ({ route, navigation }) => {
         value={rentpm}
         onChangeText={(rentpm) => setRentpm(rentpm)}
       />
-      <Button
-        color={colorPalette.primaryColor}
-        mode="outlined"
-        uppercase={true}
-        loading={imageUploading}
-        dark={true}
-        labelStyle={{ fontSize: 20 }}
-        style={{ height: 55, justifyContent: "center", marginTop: 10 }}
-        onPress={() => pickImage()}
-      >
-        upload photo
-      </Button>
+
       <Button
         color={colorPalette.primaryColor}
         mode="contained"
         uppercase={true}
         dark={true}
         labelStyle={{ fontSize: 20 }}
-        style={{ height: 55, justifyContent: "center", marginTop: 15 }}
+        style={{
+          height: 55,
+          justifyContent: "center",
+          marginTop: 15,
+          marginBottom: 15,
+        }}
         onPress={() => addData()}
       >
         Create Rental ad
@@ -267,6 +304,15 @@ const PGInfo = ({ route, navigation }) => {
     </ScrollView>
   );
 };
+const mapStateToProps = (state) => ({
+  userState: state.auth.user,
+});
+
+PGInfo.propTypes = {
+  userState: propTypes.object.isRequired,
+};
+
+export default connect(mapStateToProps)(PGInfo);
 
 const styles = StyleSheet.create({
   title: {
@@ -275,6 +321,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
 
     color: colorPalette.black,
+  },
+  tinyLogo: {
+    width: 300,
+    height: 300,
+    alignSelf: "center",
+    marginBottom: 10,
+    borderRadius: 15,
   },
   tenent: {
     flexDirection: "row",
@@ -291,5 +344,3 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
   },
 });
-
-export default PGInfo;

@@ -8,10 +8,17 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { colorPalette } from "../utility/Constants";
-import { Button, Searchbar, Avatar, Divider } from "react-native-paper";
+import {
+  Button,
+  Searchbar,
+  Avatar,
+  Divider,
+  ActivityIndicator,
+} from "react-native-paper";
 import { Entypo } from "@expo/vector-icons";
 import { connect } from "react-redux";
 import propTypes from "prop-types";
@@ -19,14 +26,16 @@ import { signOut } from "../redux/action/auth";
 import Card from "../components/Card";
 import LocationLoading from "../screens/LocationLoading";
 import * as Location from "expo-location";
+import { getPosts } from "../redux/action/post";
 import { UserLocationContext } from "../contexts/UserLocationContext";
-const Home = ({ navigation, signOut }) => {
+const Home = ({ navigation, signOut, getPosts, postState, userDetails }) => {
   const [address, setAddress, loading, setLoading] =
     useContext(UserLocationContext);
   const [searchQuery, setSearchQuery] = useState("");
   const onChangeSearch = (query) => setSearchQuery(query);
 
   useEffect(() => {
+    getPosts();
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -57,6 +66,15 @@ const Home = ({ navigation, signOut }) => {
       setLoading(false);
     })();
   }, []);
+  if (postState.loading) {
+    return (
+      <ActivityIndicator
+        color={colorPalette.primaryColor}
+        size="large"
+        style={{ marginTop: "100%" }}
+      />
+    );
+  }
   const doSignOut = () => {
     signOut();
   };
@@ -79,27 +97,41 @@ const Home = ({ navigation, signOut }) => {
           <Text style={styles.logOutText}>Log Out</Text>
         </TouchableOpacity>
       </View>
-      <ScrollView
-        contentContainerStyle={{
-          paddingHorizontal: 15,
-        }}
-      >
-        <Card />
-        <Card />
-        <Card />
-        <Card />
-      </ScrollView>
+
+      <FlatList
+        data={postState.posts}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item, index, separators }) => (
+          <Card item={item} userDetails={userDetails} key={item.id} />
+        )}
+        ListEmptyComponent={() => (
+          <View>
+            <Text>No post</Text>
+          </View>
+        )}
+      />
     </SafeAreaView>
   );
 };
 
 const mapDispatchToProps = {
   signOut,
+  getPosts,
 };
+
+const mapStateToProps = (state) => ({
+  postState: state.post,
+  userDetails: state.auth.user,
+});
+
 Home.propTypes = {
   signOut: propTypes.func.isRequired,
+  getPosts: propTypes.func.isRequired,
+  postState: propTypes.object.isRequired,
+  userState: propTypes.object,
 };
-export default connect(null, mapDispatchToProps)(Home);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
