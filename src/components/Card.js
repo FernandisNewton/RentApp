@@ -7,44 +7,54 @@ import {
   StatusBar,
   ScrollView,
   Image,
+  TouchableOpacity,
 } from "react-native";
 import { colorPalette } from "../utility/Constants";
 import { Divider } from "react-native-paper";
-export default function Card() {
+import { useNavigation } from "@react-navigation/native";
+export default function Card({ item, userDetails }) {
+  const navigation = useNavigation();
+  const nav = () => {
+    navigation.navigate("Details", { item });
+  };
   return (
-    <View style={styles.card}>
-      <View style={styles.content}>
-        <Image
-          style={styles.cardImage}
-          source={require("../assets/pg1.jpg")}
-        ></Image>
-        <View>
-          <Text style={styles.pgName}>Winston Ghar</Text>
-          <Text style={styles.catName}>Boys or girls</Text>
+    <TouchableOpacity onPress={nav}>
+      <View style={styles.card}>
+        <View style={styles.content}>
+          <Image
+            style={styles.cardImage}
+            source={{
+              uri: item.picture,
+            }}
+          ></Image>
+          <View>
+            <Text style={styles.pgName}>{item.adTitle}</Text>
+            <Text style={styles.catName}>Boys or girls</Text>
+          </View>
+        </View>
+        <Divider style={{ height: 2, marginTop: 4 }} />
+        <View style={styles.price}>
+          <Text
+            style={{
+              fontFamily: "Poppins_700Bold",
+              fontSize: 18,
+              color: colorPalette.black,
+            }}
+          >
+            Rent
+          </Text>
+          <Text
+            style={{
+              fontFamily: "Poppins_700Bold",
+              fontSize: 18,
+              color: colorPalette.black,
+            }}
+          >
+            Monthly: Rs.{item.rentpm}
+          </Text>
         </View>
       </View>
-      <Divider style={{ height: 2, marginTop: 4 }} />
-      <View style={styles.price}>
-        <Text
-          style={{
-            fontFamily: "Poppins_700Bold",
-            fontSize: 18,
-            color: colorPalette.black,
-          }}
-        >
-          Daily: $200
-        </Text>
-        <Text
-          style={{
-            fontFamily: "Poppins_700Bold",
-            fontSize: 18,
-            color: colorPalette.black,
-          }}
-        >
-          Monthly: $400
-        </Text>
-      </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -55,6 +65,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     elevation: 8,
     marginTop: 10,
+    marginBottom: 10,
+    alignSelf: "center",
+    width: "95%",
   },
   content: {
     height: "75%",

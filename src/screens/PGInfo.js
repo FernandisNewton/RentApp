@@ -157,12 +157,19 @@ const PGInfo = ({ route, navigation, userState }) => {
         />
       )}
       {imageUploading ? (
-        <Progress.Bar
+        <Progress.Circle
           progress={uploadStatus}
-          width={320}
           color={colorPalette.primaryColor}
-          height={15}
-          borderRadius={8}
+          size={130}
+          thickness={8}
+          showsText={true}
+          textStyle={{
+            fontSize: 25,
+            fontWeight: "bold",
+
+            color: colorPalette.primaryColor,
+          }}
+          style={{ alignSelf: "center" }}
         />
       ) : (
         <Button

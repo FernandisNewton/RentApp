@@ -11,6 +11,8 @@ import PGInfo from "./screens/PGInfo";
 import UserRegistration from "./screens/UserRegistration";
 import LocationLoading from "./screens/LocationLoading";
 import Completed from "./screens/Completed";
+import Details from "./screens/Details";
+import Card from "./components/Card";
 //----****----
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -82,6 +84,7 @@ const App = ({ authState }) => {
         {authState.isAuthenticated ? (
           <>
             {/* <Stack.Screen name="Home" component={Home} /> */}
+
             <Stack.Screen name="RootNav" component={RootNav} />
             <Stack.Screen name="MapScreen" component={MapScreen} />
             <Stack.Screen name="PostAd" component={PostAd} />
@@ -89,6 +92,8 @@ const App = ({ authState }) => {
             <Stack.Screen name="LocationLoading" component={LocationLoading} />
             <Stack.Screen name="PGInfo" component={PGInfo} />
             <Stack.Screen name="Completed" component={Completed} />
+            <Stack.Screen name="Details" component={Details} />
+            <Stack.Screen name="Card" component={Card} />
           </>
         ) : (
           <>

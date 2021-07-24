@@ -35,7 +35,6 @@ const Home = ({ navigation, signOut, getPosts, postState, userDetails }) => {
   const onChangeSearch = (query) => setSearchQuery(query);
 
   useEffect(() => {
-    getPosts();
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -53,6 +52,7 @@ const Home = ({ navigation, signOut, getPosts, postState, userDetails }) => {
       })
         .then((result) => {
           console.log("ADDRESS", result);
+          getPosts(result[0].city);
           setAddress({
             city: result[0].city,
             latitude: location.coords.latitude,
@@ -99,6 +99,7 @@ const Home = ({ navigation, signOut, getPosts, postState, userDetails }) => {
       </View>
 
       <FlatList
+        style={{ width: "100%", paddingBottom: 15 }}
         data={postState.posts}
         keyExtractor={(item) => item.id}
         renderItem={({ item, index, separators }) => (
