@@ -1,9 +1,24 @@
 import React from "react";
-import { View, StyleSheet, Text, SafeAreaView, Image } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  SafeAreaView,
+  Image,
+  Linking,
+} from "react-native";
 import { Divider, Button } from "react-native-paper";
 import { colorPalette } from "../utility/Constants";
+import { useNavigation } from "@react-navigation/native";
 const Details = ({ route }) => {
-  const { item } = route.params;
+  const { item, tenent } = route.params;
+  const navigation = useNavigation();
+
+  const dialCall = () => {
+    let phoneNumber = "tel:${item.phone}";
+
+    Linking.openURL(phoneNumber);
+  };
   return (
     <SafeAreaView style={styles.container}>
       <Image
@@ -15,9 +30,7 @@ const Details = ({ route }) => {
       <View style={styles.imageContainer}></View>
       <View style={styles.details}>
         <Text style={styles.title}>{item.adTitle}</Text>
-        <Text style={styles.tenent}>
-          {item.tenentType.tenentBoys ? "boys" : "girls"}
-        </Text>
+        <Text style={styles.tenent}>{tenent}</Text>
         <Text style={styles.title}>Information</Text>
         <View style={styles.Information}>
           <Text style={styles.info}>Room Type: {item.roomType}</Text>
@@ -54,7 +67,7 @@ const Details = ({ route }) => {
 
               width: "48%",
             }}
-            onPress={() => addData()}
+            onPress={() => dialCall()}
           >
             Contact
           </Button>
@@ -71,7 +84,7 @@ const Details = ({ route }) => {
 
               width: "48%",
             }}
-            onPress={() => addData()}
+            onPress={() => navigation.navigate("Direction")}
           >
             Get Direction
           </Button>

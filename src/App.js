@@ -13,6 +13,7 @@ import LocationLoading from "./screens/LocationLoading";
 import Completed from "./screens/Completed";
 import Details from "./screens/Details";
 import Card from "./components/Card";
+import Direction from "./screens/Direction";
 //----****----
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -94,6 +95,7 @@ const App = ({ authState }) => {
             <Stack.Screen name="Completed" component={Completed} />
             <Stack.Screen name="Details" component={Details} />
             <Stack.Screen name="Card" component={Card} />
+            <Stack.Screen name="Direction" component={Direction} />
           </>
         ) : (
           <>

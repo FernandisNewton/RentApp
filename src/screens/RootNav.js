@@ -2,34 +2,41 @@ import React, { useContext } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { BottomNavigation } from "react-native-paper";
 import { colorPalette } from "../utility/Constants";
+import { FontAwesome } from "@expo/vector-icons";
 
 import Home from "./Home";
 import RentAds from "./RentAds";
+import Search from "./Search";
 
 const HomeRoute = () => <Home />;
 
 const AdRoute = () => <RentAds />;
 
-const AdsRoute = () => <Text>Recents</Text>;
+const AdsRoute = () => <Search />;
 
 export default function RootNav() {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: "home", title: "Home", icon: "home" },
+
+    // { key: "favorites", title: "Notifications", icon: "message", badge: "1" },
+    {
+      key: "search",
+      title: "Search",
+      icon: () => <FontAwesome name="search" size={24} color="black" />,
+    },
     {
       key: "post",
       title: "Post Rent Ad",
       icon: "plus-circle",
     },
-    // { key: "favorites", title: "Notifications", icon: "message", badge: "1" },
-    { key: "ads", title: "Your Ads", icon: "heart" },
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
     home: HomeRoute,
     post: AdRoute,
     // favorites: RecentsRoute,
-    ads: AdsRoute,
+    search: AdsRoute,
   });
 
   return (

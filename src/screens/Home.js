@@ -99,15 +99,21 @@ const Home = ({ navigation, signOut, getPosts, postState, userDetails }) => {
       </View>
 
       <FlatList
-        style={{ width: "100%", paddingBottom: 15 }}
+        style={{ width: "100%" }}
         data={postState.posts}
         keyExtractor={(item) => item.id}
         renderItem={({ item, index, separators }) => (
           <Card item={item} userDetails={userDetails} key={item.id} />
         )}
         ListEmptyComponent={() => (
-          <View>
-            <Text>No post</Text>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text>There are no items to display</Text>
           </View>
         )}
       />

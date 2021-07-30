@@ -7,16 +7,15 @@ export const getPosts = (place) => async (dispatch) => {
       .database()
       .ref("/posts/")
       .on("value", (snapshot) => {
-        var newArr = [];
-
-        Object.values(snapshot.val()).map((item) => {
-          if (item.city == place) {
-            newArr.push(item);
-          }
-        });
-        console.log("USER_DATA:----", newArr);
-
         if (snapshot.val()) {
+          var newArr = [];
+
+          Object.values(snapshot.val()).map((item) => {
+            if (item.city == place) {
+              newArr.push(item);
+            }
+          });
+          console.log("USER_DATA:----", newArr);
           dispatch({
             type: SET_POST,
             payload: newArr,

@@ -23,7 +23,7 @@ const PGInfo = ({ route, navigation, userState }) => {
   const [tenentGirls, setTenentGirls] = useState(false);
   const [tenentFamily, setTenentFamily] = useState(false);
   const [roomType, setRoomType] = useState("Room type");
-  const [value, setValue] = useState("fixed");
+  const [value, setValue] = useState("Fixed");
   const [deposit, setDeposit] = useState(null);
   const [phone, setPhone] = useState(null);
   const [image, setImage] = useState(null);
@@ -89,7 +89,7 @@ const PGInfo = ({ route, navigation, userState }) => {
   }, []);
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 4],
       quality: 1,
@@ -132,7 +132,7 @@ const PGInfo = ({ route, navigation, userState }) => {
         phone,
         picture: image,
         date: Date.now(),
-        by: userState.name,
+        by: userState.uid,
       });
 
       navigation.navigate("Completed");
@@ -235,9 +235,9 @@ const PGInfo = ({ route, navigation, userState }) => {
         prompt="Select room type"
         onValueChange={(itemValue, itemIndex) => setRoomType(itemValue)}
       >
-        <Picker.Item label="1BHK" value="1bhk" />
-        <Picker.Item label="2BHK" value="2bhk" />
-        <Picker.Item label="3BHK" value="3bhk" />
+        <Picker.Item label="1BHK" value="1BHK" />
+        <Picker.Item label="2BHK" value="2BHK" />
+        <Picker.Item label="3BHK" value="3BHK" />
       </Picker>
       <Text style={styles.formStyle}>Security Deposit Type:</Text>
 
@@ -246,10 +246,10 @@ const PGInfo = ({ route, navigation, userState }) => {
         value={value}
       >
         <View style={styles.radio}>
-          <RadioButton.Item label="Fixed" value="fixed" position="leading" />
+          <RadioButton.Item label="Fixed" value="Fixed" position="leading" />
           <RadioButton.Item
             label="Monthly"
-            value="monthly"
+            value="Monthly"
             position="leading"
           />
         </View>
